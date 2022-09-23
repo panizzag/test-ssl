@@ -8,13 +8,15 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="9eb66d68-2eb3-4dd1-bd5f-00a5ce21d891" >
-		<http:listener-connection host="0.0.0.0" port="8082" protocol="HTTPS">
-			<tls:context />
+		<http:listener-connection host="0.0.0.0" port="${https.private.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" alias="porto" keyPassword="porto123" password="porto123" />
+			</tls:context>
 		</http:listener-connection>
 	</http:listener-config>
 <!-- 	<api-gateway:autodiscovery apiId="${apiId}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="078661b3-3cee-4298-9559-4a033adbaf5d" flowRef="test-vpcFlow" />
  -->	<flow name="test-vpcFlow" doc:id="56a46774-324f-4168-8ae4-97e3fe7e4ee3" >
-		<http:listener doc:name="Listener" doc:id="77349241-c675-4848-9fb3-2588c6d0dbfa" config-ref="HTTP_Listener_config" path="/re/bike/v1/propostas"/>
+		<http:listener doc:name="Listener" doc:id="77349241-c675-4848-9fb3-2588c6d0dbfa" config-ref="HTTP_Listener_config" path="/propostas"/>
 		<ee:transform doc:name="Transform Message" doc:id="33faac44-cd64-45e7-a3b2-68417a49d004" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
